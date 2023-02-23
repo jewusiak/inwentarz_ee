@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:inwentarz_ee/nav_drawer.dart';
+import 'package:inwentarz_ee/widgets/nav_drawer.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({Key? key}) : super(key: key);
