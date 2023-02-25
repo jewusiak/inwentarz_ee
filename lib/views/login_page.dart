@@ -63,15 +63,17 @@ Future login(String email, String password, context) async {
     return;
   }
 
-  showCircularProgressIndicatorDialog(context);
 
   try {
+    showCircularProgressIndicatorDialog(context);
     await FirebaseAuth.instance.signInWithEmailAndPassword(email: email.trim(), password: password);
     Navigator.of(context).pop();
   } on FirebaseAuthException catch (e) {
-    if (e.code == 'user-not-found' || e.code == 'wrong-password') {
+    if (e.code == 'user-not-found' || e.code == 'wrong-password' || e.code == 'invalid-email') {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Nieprawidłowe dane logowania.')));
     }
+      print(e.code);
+
   }
     Navigator.of(context).pop();
 }

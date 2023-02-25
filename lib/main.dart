@@ -4,9 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:inwentarz_ee/views/home_page.dart';
 
 import 'package:inwentarz_ee/views/login_page.dart';
+import 'package:inwentarz_ee/views/qr_scanner.dart';
+import 'package:inwentarz_ee/views/search_page.dart';
 
 import 'services/firebase_options.dart';
-import 'views/test_page.dart';
+import 'views/create_equipment_page.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -31,8 +33,10 @@ class MyApp extends StatelessWidget {
       ),
       routes: {
         '/': (context) => HomePage(),
-        '/testpage': (context) => TestPage(),
         '/login': (context) => LoginPage(),
+        '/qrscanner': (context) => QRScannerPage(),
+        '/search': (context) => SearchPage(),
+        '/new_equipment': (context) => CreateEquipmentPage(),
       },
     );
   }
