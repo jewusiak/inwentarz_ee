@@ -25,6 +25,9 @@ dev_dependencies:
   google_fonts:
   firebase_auth:
   firebase_core:
+  firebase_storage:
+  file_picker:
+  permission_handler:
 
 flutter:
   uses-material-design: true

@@ -1,5 +1,7 @@
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:inwentarz_ee/services/file_utils.dart';
 
 class CreateEquipmentPage extends StatefulWidget {
   CreateEquipmentPage({Key? key}) : super(key: key);
@@ -17,7 +19,9 @@ class _CreateEquipmentPageState extends State<CreateEquipmentPage> {
 
   DateTime? _selectedDate = null;
 
-  final _calibrationDateController=TextEditingController( );
+  final _calibrationDateController = TextEditingController();
+
+  List<String> _selectedFilePaths = [];
 
   @override
   Widget build(BuildContext context) {
@@ -57,16 +61,53 @@ class _CreateEquipmentPageState extends State<CreateEquipmentPage> {
             ),
             TextFormField(
               controller: _calibrationDateController,
-              decoration: InputDecoration(labelText: "Data następnego wzorcowania",border: OutlineInputBorder()),
+              decoration: InputDecoration(labelText: "Data następnego wzorcowania", border: OutlineInputBorder()),
               readOnly: true,
               onTap: () async {
-                _selectedDate=await showDatePicker(context: context, initialDate: DateTime.now().add(Duration(days: 1)), firstDate: DateTime.now().add(Duration(days: 1)), lastDate: DateTime.now().add(Duration(days: 36500)), cancelText: "Usuń deklarację", confirmText: "Wybierz datę");
-                _calibrationDateController.text = _selectedDate!=null ? DateFormat('dd.MM.yyyy').format(_selectedDate!): "";
-                setState(() {
-
-                });
+                _selectedDate = await showDatePicker(
+                    context: context,
+                    initialDate: DateTime.now().add(Duration(days: 1)),
+                    firstDate: DateTime.now().add(Duration(days: 1)),
+                    lastDate: DateTime.now().add(Duration(days: 36500)),
+                    cancelText: "Usuń deklarację",
+                    confirmText: "Wybierz datę");
+                _calibrationDateController.text = _selectedDate != null ? DateFormat('dd.MM.yyyy').format(_selectedDate!) : "";
+                setState(() {});
               },
+            ),
+            SizedBox(
+              height: _separationHeight,
+            ),
+            Row(
+              mainAxisSize: MainAxisSize.max,
+              children: [
+                Expanded(
+                  flex: 2,
+                  child: Center(
+                    child: Text(_selectedFilePaths.isEmpty ? "Nie wybrano plików" : "Wybrano ${_selectedFilePaths.length} plików"),
+                  ),
+                ),
+                Expanded(
+                  flex: 1,
+                  child: ElevatedButton(
+                    onPressed: () async {
+                      bool ready = await FileUtils.checkStoragePermissions(context);
+                      if (!ready) return;
 
+                      FilePickerResult? result = await FilePicker.platform.pickFiles(
+                          dialogTitle: "Wybierz załączniki",
+                          allowedExtensions: ['jpg', 'jpeg', 'png', 'bmp', 'pdf', 'docx', 'xlsx', 'doc', 'xls'],
+                          type: FileType.custom,
+                          allowMultiple: true);
+
+                      setState(() {
+                        _selectedFilePaths = result == null ? [] : result.paths.whereType<String>().toList();
+                      });
+                    },
+                    child: Text("Dodaj pliki"),
+                  ),
+                ),
+              ],
             )
           ],
         ),
