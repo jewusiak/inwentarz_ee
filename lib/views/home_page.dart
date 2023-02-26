@@ -9,7 +9,6 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        //drawer: Drawer(child: NavDrawer()),
         appBar: AppBar(
           title: Center(child: Text("Inwentarz EE")),
         ),
@@ -126,9 +125,9 @@ class HomePage extends StatelessWidget {
                               mainAxisSpacing: 20,
                               physics: NeverScrollableScrollPhysics(),
                               children: [
-                                homePageIcon(context, '/search', Theme.of(context).primaryColor, Icons.search),
-                                homePageIcon(context, '/qrscanner', Theme.of(context).primaryColor, Icons.qr_code),
-                                homePageIcon(context, '/new_equipment', Theme.of(context).primaryColor, Icons.add),
+                                homePageIcon(context, '/search',  Icons.search, true),
+                                homePageIcon(context, '/qrscanner',  Icons.qr_code, true),
+                                homePageIcon(context, '/new_equipment', Icons.add, snapshot.hasData),
                               ],
                             ),
                           ),
@@ -141,27 +140,20 @@ class HomePage extends StatelessWidget {
             }));
   }
 }
-//
-// Padding(
-//                     padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
-//                     child: FittedBox(
-//                         child: Text(
-//                           snapshot.hasData ?  snapshot.data!.email! : "Niezalogowany",
-//                           style: GoogleFonts.raleway(fontWeight: FontWeight.w800, fontSize: 18, color: Colors.black87),
-//                         ),
-//                         fit: BoxFit.scaleDown),
-//                   ),
-//
 
-Widget homePageIcon(context, String route, Color backgroundColor, IconData icon) => Container(
+
+Widget homePageIcon(context, String route, IconData icon, bool enabled) => Container(
       width: 110,
       height: 110,
-      decoration: BoxDecoration(color: backgroundColor, borderRadius: BorderRadius.circular(30)),
+      decoration: BoxDecoration(color: enabled?Theme.of(context).primaryColor : Theme.of(context).disabledColor, borderRadius: BorderRadius.circular(30)),
       child: IconButton(
-        onPressed: () => Navigator.pushNamed(context, route),
+        onPressed: () {
+          if(enabled) Navigator.pushNamed(context, route); else ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Zaloguj się."), duration: Duration(milliseconds: 500),));
+        },
         icon: Icon(
           icon,
           size: 70,
+          color: enabled ? null : Colors.black45,
         ),
       ),
     );
