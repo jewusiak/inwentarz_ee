@@ -28,6 +28,7 @@ dev_dependencies:
   firebase_storage:
   file_picker:
   permission_handler:
+  cloud_firestore:
 
 flutter:
   uses-material-design: true

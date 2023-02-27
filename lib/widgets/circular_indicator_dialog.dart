@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 
-Future showCircularProgressIndicatorDialog(context) async {
+Future showCircularProgressIndicatorDialog(context, {dismissable = false}) async {
   await showDialog(
-    barrierDismissible: false,
+    barrierDismissible: dismissable,
     context: context,
     builder: (context) => WillPopScope(
-      onWillPop: () async => false,
+      onWillPop: () => dismissable,
       child: Center(
         child: CircularProgressIndicator(),
       ),

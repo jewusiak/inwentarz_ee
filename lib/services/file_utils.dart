@@ -2,6 +2,8 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:path/path.dart';
 
 class FileUtils {
   static Future<bool> checkStoragePermissions(context) async {
@@ -48,5 +50,15 @@ class FileUtils {
       if (_showAgain) return checkStoragePermissions(context);
     }
     return false;
+  }
+
+  static Future<List<String>> uploadFilesToFirebase(List<String> attachmentPaths, String prefix) async {
+    List<String> urls=[];
+    for (int i = 0; i < attachmentPaths.length; i++){
+      String filePath = attachmentPaths[i];
+      var uploadedFile = await FirebaseStorage.instance.ref().child('files/${prefix}_$i${extension(filePath)}').putFile(File(filePath));
+      urls.add(await uploadedFile.ref.getDownloadURL());
+    }
+    return urls;
   }
 }

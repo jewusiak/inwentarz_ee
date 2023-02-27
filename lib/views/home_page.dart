@@ -40,17 +40,18 @@ class HomePage extends StatelessWidget {
                           backgroundColor: Colors.grey,
                           child: Padding(
                             padding: const EdgeInsets.all(4),
-                            child: ClipOval(
-                              child: snapshot.hasData && snapshot.data!.photoURL != null
-                                  ? Image.network(
-                                      snapshot.data!.photoURL!,
-                                      fit: BoxFit.cover,
-                                      height: 100,
-                                      width: 100,
-                                    )
-                                  : Image.asset("assets/images/default-avatar.png"),
-                            ),
-                          )),
+                          child: ClipOval(
+                            child: snapshot.hasData && snapshot.data!.photoURL != null
+                                ? Image.network(
+                                    snapshot.data!.photoURL!,
+                                    fit: BoxFit.cover,
+                                    height: 100,
+                                    width: 100,
+                                  )
+                                : Image.asset("assets/images/default-avatar.png"),
+                          ),
+                        ),
+                      ),
                     ),
                   ),
                   Positioned(
@@ -125,8 +126,8 @@ class HomePage extends StatelessWidget {
                               mainAxisSpacing: 20,
                               physics: NeverScrollableScrollPhysics(),
                               children: [
-                                homePageIcon(context, '/search',  Icons.search, true),
-                                homePageIcon(context, '/qrscanner',  Icons.qr_code, true),
+                                homePageIcon(context, '/search', Icons.search, true),
+                                homePageIcon(context, '/qrscanner', Icons.qr_code, true),
                                 homePageIcon(context, '/new_equipment', Icons.add, snapshot.hasData),
                               ],
                             ),
@@ -148,7 +149,13 @@ Widget homePageIcon(context, String route, IconData icon, bool enabled) => Conta
       decoration: BoxDecoration(color: enabled?Theme.of(context).primaryColor : Theme.of(context).disabledColor, borderRadius: BorderRadius.circular(30)),
       child: IconButton(
         onPressed: () {
-          if(enabled) Navigator.pushNamed(context, route); else ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Zaloguj się."), duration: Duration(milliseconds: 500),));
+          if (enabled)
+            Navigator.pushNamed(context, route);
+          else
+            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+              content: Text("Zaloguj się."),
+              duration: Duration(milliseconds: 500),
+            ));
         },
         icon: Icon(
           icon,

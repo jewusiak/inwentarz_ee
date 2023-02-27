@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:inwentarz_ee/views/equipment_details_page.dart';
 import 'package:inwentarz_ee/views/home_page.dart';
 
 import 'package:inwentarz_ee/views/login_page.dart';
