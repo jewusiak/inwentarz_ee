@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
-Future showCircularProgressIndicatorDialog(context, {dismissable = false}) async {
+Future showCircularProgressIndicatorDialog(context,
+    {dismissable = false}) async {
   await showDialog(
     barrierDismissible: dismissable,
     context: context,

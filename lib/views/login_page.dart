@@ -1,6 +1,5 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:inwentarz_ee/widgets/app_bars.dart';
+import 'package:inwentarz_ee/data_access/session_data.dart';
 import 'package:inwentarz_ee/widgets/circular_indicator_dialog.dart';
 
 class LoginPage extends StatefulWidget {
@@ -19,7 +18,9 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: LeadingPopAppBar(title: "Zaloguj się", nav: Navigator.of(context)),
+      appBar: AppBar(
+        title: Text("Zaloguj się"),
+      ),
       body: Center(
         child: Container(
           width: 300,
@@ -39,7 +40,9 @@ class _LoginPageState extends State<LoginPage> {
                 autofillHints: [AutofillHints.email],
                 cursorHeight: 20,
               ),
-              SizedBox(height: 20,),
+              SizedBox(
+                height: 20,
+              ),
               TextFormField(
                 obscureText: true,
                 decoration: InputDecoration(
@@ -49,7 +52,8 @@ class _LoginPageState extends State<LoginPage> {
                 keyboardType: TextInputType.emailAddress,
                 controller: _passwordController,
                 textInputAction: TextInputAction.done,
-                onFieldSubmitted: (value) => login(_loginController.value.text, _passwordController.value.text, context),
+                onFieldSubmitted: (value) => login(_loginController.value.text,
+                    _passwordController.value.text, context),
                 autofillHints: [AutofillHints.password],
                 cursorHeight: 20,
               ),
@@ -57,7 +61,9 @@ class _LoginPageState extends State<LoginPage> {
                 height: 20,
               ),
               ElevatedButton(
-                  onPressed: () => login(_loginController.value.text, _passwordController.value.text, context), child: Text("Zaloguj się")),
+                  onPressed: () => login(_loginController.value.text,
+                      _passwordController.value.text, context),
+                  child: Text("Zaloguj się")),
             ],
           ),
         ),
@@ -68,21 +74,23 @@ class _LoginPageState extends State<LoginPage> {
 
 Future login(String email, String password, context) async {
   if (email.isEmpty || password.isEmpty) {
-    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Usupełnij dane.')));
+    ScaffoldMessenger.of(context)
+        .showSnackBar(SnackBar(content: Text('Uzupełnij dane.')));
     return;
   }
 
-
   try {
     showCircularProgressIndicatorDialog(context);
-    await FirebaseAuth.instance.signInWithEmailAndPassword(email: email.trim(), password: password);
+    await SessionData().authenticate(email.trim(), password.trim());
     Navigator.of(context).pop();
-  } on FirebaseAuthException catch (e) {
-    if (e.code == 'user-not-found' || e.code == 'wrong-password' || e.code == 'invalid-email') {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Nieprawidłowe dane logowania.')));
-    }
-      print(e.code);
-
+  } on Exception catch (e) {
+    if (e.toString().contains("401"))
+      ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Nieprawidłowe dane logowania.')));
+    else if (e.toString().contains("403"))
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content:
+              Text('Konto nieaktywne. Skontaktuj się z administratorem.')));
   }
-    Navigator.of(context).pop();
+  Navigator.of(context).pop();
 }

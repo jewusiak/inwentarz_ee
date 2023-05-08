@@ -13,22 +13,25 @@ dependencies:
   flutter:
     sdk: flutter
 
-
-  cupertino_icons: ^1.0.2
-  shared_preferences: ^2.0.17
+  cupertino_icons:
+  shared_preferences:
+  flutter_lints:
+  google_fonts:
+  intl:
+  flutter_secure_storage:
+  file_picker:
+  permission_handler:
+  provider:
+  sn_progress_dialog:
+  carousel_slider:
+  url_launcher:
+  photo_view:
+  mobile_scanner:
+  printing:
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-
-  flutter_lints: ^2.0.0
-  google_fonts:
-  firebase_auth:
-  firebase_core:
-  firebase_storage:
-  file_picker:
-  permission_handler:
-  cloud_firestore:
 
 flutter:
   uses-material-design: true
